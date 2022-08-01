@@ -33,3 +33,4 @@ runs:
           ~/.m2/repository
           ${{ inputs.additional-path }}
         key: ${{ runner.os }}-maven-${{ steps.cache-period.outputs.CACHE_PERIOD }}${{ inputs.key-suffix }}
+        restore-keys: ${{ runner.os }}-maven-${{ steps.cache-period.outputs.CACHE_PERIOD }}
