@@ -1,0 +1,22 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  test:
+    name: Test action
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Maven repo
+        if: >-
+          ${{ github.repository_owner == 'gantsign'
+          && github.actor != 'dependabot[bot]' }}
+        uses: ./

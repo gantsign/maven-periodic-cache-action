@@ -1,0 +1,31 @@
+name: Maven Periodic Cache
+description: Caches the Maven repository periodically by date.
+inputs:
+  cache-period-days:
+    description: The maximum duration in days to keep the cache.
+    required: true
+    default: '30'
+  additional-path:
+    description: Additional paths to cache (or not cache).
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+      # When code changes to a project are infrequent, and most commits
+      # change the pom.xml, it better to cache by date period rather than file
+      # hash.
+    - name: Calculate the cache period
+      shell: bash
+      run: |
+        leveler="$(wc -c <<< "$GITHUB_REPOSITORY")"
+        echo "Repo: $GITHUB_REPOSITORY=$leveler"
+        echo "::set-output name=CACHE_PERIOD::$(date +%Y)-$(($(($leveler + $(date +%-j))) / ${{ inputs.cache-period-days }}))"
+      id: cache-period
+    - name: Cache the local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.m2/repository
+          ${{ inputs.additional-path }}
+        key: ${{ runner.os }}-maven-${{ steps.cache-period.outputs.CACHE_PERIOD }}
