@@ -19,6 +19,7 @@ jobs:
         with:
            cache-period-days: 30
            additional-path: '!~/.m2/repository/com/example'
+           key-suffix: '-deploy-site'
 ```
 
 License

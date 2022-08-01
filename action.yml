@@ -9,6 +9,10 @@ inputs:
     description: Additional paths to cache (or not cache).
     required: false
     default: ''
+  key-suffix:
+    description: Additional suffix to add to the key.
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
@@ -28,4 +32,4 @@ runs:
         path: |
           ~/.m2/repository
           ${{ inputs.additional-path }}
-        key: ${{ runner.os }}-maven-${{ steps.cache-period.outputs.CACHE_PERIOD }}
+        key: ${{ runner.os }}-maven-${{ steps.cache-period.outputs.CACHE_PERIOD }}${{ inputs.key-suffix }}
